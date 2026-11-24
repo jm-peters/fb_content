@@ -1,14 +1,18 @@
 import asyncio
+import io
+import os
 import subprocess
 import textwrap
 from pathlib import Path
 
 import edge_tts
-from PIL import Image, ImageDraw, ImageFont
+import requests
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 WIDTH = 1080
 HEIGHT = 1920
 FPS = 30
+PIXABAY_API_URL = "https://pixabay.com/api/"
 VOICE = "en-US-AndrewNeural"
 BG_COLOR = (13, 17, 23)
 CARD_COLOR = (22, 30, 42)
@@ -140,8 +144,64 @@ def _draw_wrapped(
     return y
 
 
-def _make_terminal_card(scene: dict, index: int, count: int, title: str, output: Path) -> None:
-    image = Image.new("RGB", (WIDTH, HEIGHT), BG_COLOR)
+def _pixabay_background(query: str, api_key: str) -> Image.Image | None:
+    try:
+        response = requests.get(
+            PIXABAY_API_URL,
+            params={
+                "key": api_key,
+                "q": " ".join(query.split())[:100],
+                "image_type": "photo",
+                "safesearch": "true",
+                "per_page": 3,
+            },
+            timeout=20,
+        )
+    except requests.RequestException:
+        raise RuntimeError("Pixabay image search request failed.") from None
+    if response.status_code >= 400:
+        raise RuntimeError(f"Pixabay image search failed with HTTP {response.status_code}.")
+    try:
+        payload = response.json()
+    except ValueError:
+        raise RuntimeError("Pixabay image search returned invalid JSON.") from None
+    hits = payload.get("hits", [])
+    image_url = next(
+        (hit.get("webformatURL") for hit in hits if hit.get("webformatURL")),
+        None,
+    )
+    if not image_url:
+        return None
+
+    try:
+        image_response = requests.get(image_url, timeout=30)
+    except requests.RequestException:
+        raise RuntimeError("Could not download the selected Pixabay image.") from None
+    if image_response.status_code >= 400:
+        raise RuntimeError(
+            f"Pixabay image download failed with HTTP {image_response.status_code}."
+        )
+    try:
+        with Image.open(io.BytesIO(image_response.content)) as image:
+            return image.convert("RGB")
+    except (OSError, ValueError):
+        raise RuntimeError("Pixabay returned invalid image data.") from None
+
+
+def _make_terminal_card(
+    scene: dict,
+    index: int,
+    count: int,
+    title: str,
+    output: Path,
+    background: Image.Image | None = None,
+) -> None:
+    if background is None:
+        image = Image.new("RGB", (WIDTH, HEIGHT), BG_COLOR)
+    else:
+        fitted_background = ImageOps.fit(background, (WIDTH, HEIGHT)).convert("RGBA")
+        overlay = Image.new("RGBA", (WIDTH, HEIGHT), (*BG_COLOR, 205))
+        image = Image.alpha_composite(fitted_background, overlay).convert("RGB")
     draw = ImageDraw.Draw(image)
     for x in range(0, WIDTH, 90):
         draw.line((x, 0, x, HEIGHT), fill=(24, 32, 44), width=2)
@@ -209,7 +269,12 @@ def _make_terminal_card(scene: dict, index: int, count: int, title: str, output:
     image.save(output, "PNG")
 
 
-def _scene_cards(reel_data: dict, work_dir: Path, duration: float) -> list[tuple[Path, float]]:
+def _scene_cards(
+    reel_data: dict,
+    work_dir: Path,
+    duration: float,
+    pixabay_api_key: str,
+) -> list[tuple[Path, float]]:
     source_scenes = reel_data.get("scenes") or []
     scenes = [
         {
@@ -242,7 +307,17 @@ def _scene_cards(reel_data: dict, work_dir: Path, duration: float) -> list[tuple
         )
         segment_duration = max(0.1, segment_duration)
         output = work_dir / f"scene_{index:02d}.png"
-        _make_terminal_card(scene, index, len(scenes), reel_data.get("title", ""), output)
+        background = _pixabay_background(scene.get("visual_prompt", ""), pixabay_api_key)
+        if background is None:
+            print(f"[!] Pixabay found no image for Reel scene {index}; using the branded background.")
+        _make_terminal_card(
+            scene,
+            index,
+            len(scenes),
+            reel_data.get("title", ""),
+            output,
+            background,
+        )
         segments.append((output, segment_duration))
         elapsed += segment_duration
     return segments
@@ -250,6 +325,10 @@ def _scene_cards(reel_data: dict, work_dir: Path, duration: float) -> list[tuple
 
 def render_reel(reel_data: dict, output_path: str, work_dir: str = "build_tmp") -> str:
     """Render a vertical, terminal-card Reel with voiceover and synced captions."""
+    pixabay_api_key = os.getenv("PIXABAY_API_KEY")
+    if not pixabay_api_key:
+        raise ValueError("PIXABAY_API_KEY environment variable is missing.")
+
     tmp = Path(work_dir)
     tmp.mkdir(parents=True, exist_ok=True)
     output = Path(output_path)
@@ -273,7 +352,7 @@ def render_reel(reel_data: dict, output_path: str, work_dir: str = "build_tmp") 
     if not 3 <= audio_duration <= 90:
         raise ValueError(f"Rendered Reel audio must be 3-90 seconds; got {audio_duration:.1f}.")
     duration = audio_duration + 0.2
-    scene_segments = _scene_cards(reel_data, tmp, duration)
+    scene_segments = _scene_cards(reel_data, tmp, duration, pixabay_api_key)
 
     ffmpeg_args = ["ffmpeg", "-y"]
     filters = []
