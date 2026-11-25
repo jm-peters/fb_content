@@ -11,6 +11,9 @@ from pydantic import BaseModel, Field
 
 EAT_TZ = timezone(timedelta(hours=3))
 DEFAULT_PLAN_PATH = Path("data/weekly_content_plan.json")
+DEFAULT_PLAN_PROGRESS_PATH = DEFAULT_PLAN_PATH.with_name(
+    f"{DEFAULT_PLAN_PATH.stem}.progress{DEFAULT_PLAN_PATH.suffix}"
+)
 DEFAULT_HISTORY_PATH = Path("history.json")
 
 
@@ -148,7 +151,7 @@ Use concise wording that fits a 1080x1350 carousel or a vertical terminal UI car
 
 DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
 FALLBACK_GEMINI_MODELS = ("gemini-3.6-flash", "gemini-3.5-flash-lite")
-RETRYABLE_GEMINI_ERROR_CODES = {429, 500, 502, 503, 504}
+RETRYABLE_GEMINI_ERROR_CODES = {500, 502, 503, 504}
 GEMINI_MAX_ATTEMPTS = 3
 GEMINI_RETRY_BASE_DELAY_SECONDS = 2
 
@@ -178,6 +181,12 @@ def _generate_content_with_fallback(client, model_name: str, contents: str, conf
                     config=config,
                 )
             except genai.errors.APIError as exc:
+                if exc.code == 429:
+                    print(
+                        "[!] Gemini quota/rate limit reached; stopping this run so "
+                        "the saved plan can resume on a later workflow retry."
+                    )
+                    raise
                 if exc.code == 404 and exc.status == "NOT_FOUND":
                     if index == len(models) - 1:
                         raise
@@ -208,6 +217,52 @@ def _generate_content_with_fallback(client, model_name: str, contents: str, conf
                 if candidate != model_name:
                     print(f"[*] Gemini model fallback selected: {candidate}")
                 return response, candidate
+
+
+def _progress_path_for(output_path: Path) -> Path:
+    return output_path.with_name(f"{output_path.stem}.progress{output_path.suffix}")
+
+
+def _write_json_atomically(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp_path = path.with_suffix(path.suffix + ".tmp")
+    temp_path.write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    temp_path.replace(path)
+
+
+def _load_plan_progress(path: Path) -> dict:
+    try:
+        progress = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"Unable to read weekly plan progress at {path}: {exc}") from exc
+    if not isinstance(progress, dict):
+        raise ValueError(f"Weekly plan progress must be a JSON object: {path}")
+    if not isinstance(progress.get("week_start"), str):
+        raise ValueError(f"Weekly plan progress is missing week_start: {path}")
+    try:
+        week_start = datetime.fromisoformat(progress["week_start"]).date()
+    except ValueError as exc:
+        raise ValueError(f"Invalid week_start in weekly plan progress: {path}") from exc
+    if week_start.weekday() != 0:
+        raise ValueError(f"week_start in weekly plan progress must be a Monday: {path}")
+    for group in ("carousels", "reels"):
+        if not isinstance(progress.get(group), list):
+            raise ValueError(f"Weekly plan progress field {group!r} must be an array: {path}")
+
+    expected_formats = {slot["day"]: slot["format"] for slot in WEEKLY_SCHEDULE}
+    seen_slots = set()
+    for group, post_format in (("carousels", "carousel"), ("reels", "reel")):
+        for post in progress[group]:
+            if not isinstance(post, dict) or not isinstance(post.get("day"), str):
+                raise ValueError(f"Invalid generated post in weekly plan progress: {path}")
+            day = post["day"]
+            if expected_formats.get(day) != post_format or (day, post_format) in seen_slots:
+                raise ValueError(f"Unexpected or duplicate post in weekly plan progress: {path}")
+            seen_slots.add((day, post_format))
+    return progress
 
 
 def _read_analytics_feedback(history_path: Path) -> str:
@@ -293,13 +348,33 @@ def generate_weekly_plan(
 
     model_name = os.getenv("GEMINI_MODEL", DEFAULT_GEMINI_MODEL)
     client = genai.Client(api_key=api_key)
-    base_monday = get_next_monday_eat()
+    output = Path(output_path)
+    progress_path = _progress_path_for(output)
+    if progress_path.exists():
+        plan = _load_plan_progress(progress_path)
+        base_monday = datetime.combine(
+            datetime.fromisoformat(plan["week_start"]).date(),
+            datetime.min.time(),
+            tzinfo=EAT_TZ,
+        )
+        print(f"[*] Resuming weekly plan for {plan['week_start']} from {progress_path}.")
+    else:
+        base_monday = get_next_monday_eat()
+        plan = {
+            "week_start": base_monday.date().isoformat(),
+            "carousels": [],
+            "reels": [],
+        }
+        _write_json_atomically(progress_path, plan)
     feedback = _read_analytics_feedback(DEFAULT_HISTORY_PATH)
     avoid_topics = past_topics or []
     winners = winning_topics or []
-    plan = {"week_start": base_monday.date().isoformat(), "carousels": [], "reels": []}
 
     for day_offset, slot in enumerate(WEEKLY_SCHEDULE):
+        group = "carousels" if slot["format"] == "carousel" else "reels"
+        if any(post["day"] == slot["day"] for post in plan[group]):
+            print(f"[*] {slot['day']} already saved; skipping generation.")
+            continue
         post_dt = (base_monday + timedelta(days=day_offset)).replace(hour=slot["hour_eat"])
         scheduled_unix = int(post_dt.timestamp())
         schema = CarouselPost if slot["format"] == "carousel" else ReelPost
@@ -343,7 +418,8 @@ seven days. Include source names and publication dates in the content or first c
         )
         normalized["scheduled_unix_time"] = scheduled_unix
         normalized["scheduled_readable_eat"] = post_dt.strftime("%Y-%m-%d %H:%M EAT")
-        plan["carousels" if slot["format"] == "carousel" else "reels"].append(normalized)
+        plan[group].append(normalized)
+        _write_json_atomically(progress_path, plan)
 
     titles = [post["title"] for group in ("carousels", "reels") for post in plan[group]]
     if len(titles) != len(set(title.casefold() for title in titles)):
@@ -353,7 +429,5 @@ seven days. Include source names and publication dates in the content or first c
     if repeated:
         raise ValueError(f"Gemini repeated recently used topics: {repeated}; refusing to publish.")
 
-    output = Path(output_path)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(plan, indent=2, ensure_ascii=False), encoding="utf-8")
+    _write_json_atomically(output, plan)
     return plan

@@ -5,6 +5,8 @@ on:
     # Runs every Sunday at 15:00 UTC (6:00 PM EAT / Nairobi time)
     # Schedules Monday through Sunday posts ahead of the new week
     - cron: "0 15 * * 0"
+    # Resume saved work every six hours after a failed or quota-limited run.
+    - cron: "0 */6 * * *"
   workflow_dispatch: # Allows manual 1-click test runs anytime from GitHub Actions tab
 
 permissions:
@@ -23,26 +25,47 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check for a weekly run to process
+        id: run_gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          if [[ -f data/weekly_content_plan.progress.json \
+            || "$EVENT_NAME" == "workflow_dispatch" \
+            || "$EVENT_SCHEDULE" == "0 15 * * 0" ]]; then
+            echo "run_engine=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_engine=false" >> "$GITHUB_OUTPUT"
+            echo "No saved weekly run; skipping this retry check."
+          fi
+
       - name: Set up Python 3.11
+        if: steps.run_gate.outputs.run_engine == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
 
       - name: Install FFmpeg and system fonts
+        if: steps.run_gate.outputs.run_engine == 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core
 
       - name: Install Python dependencies
+        if: steps.run_gate.outputs.run_engine == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run tests
+        if: steps.run_gate.outputs.run_engine == 'true'
         run: python -m unittest discover -s tests -v
 
       - name: Run SmartSort Weekly Facebook Content Engine
+        id: weekly_engine
+        if: steps.run_gate.outputs.run_engine == 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
@@ -62,10 +85,25 @@ jobs:
           fi
           python main.py
 
-      - name: Commit updated history.json
+      - name: Commit history and resumable progress
+        if: always() && steps.run_gate.outputs.run_engine == 'true'
         run: |
           git config user.name "smartsort-bot"
           git config user.email "bot@smartsort.tech"
-          git add history.json
-          git diff --staged --quiet || git commit -m "chore: update weekly FB post history & insights"
+          git add -u
+          if [[ -f data/weekly_content_plan.progress.json ]]; then
+            git add data/weekly_content_plan.progress.json
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: persist weekly content run progress"
+          fi
           git push
+
+      - name: Remove completed checkpoint
+        if: steps.weekly_engine.outcome == 'success'
+        run: |
+          if [[ -f data/weekly_content_plan.progress.json ]]; then
+            git rm data/weekly_content_plan.progress.json
+            git commit -m "chore: clear completed weekly plan checkpoint"
+            git push
+          fi
