@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List, Literal, Optional
@@ -147,6 +148,9 @@ Use concise wording that fits a 1080x1350 carousel or a vertical terminal UI car
 
 DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
 FALLBACK_GEMINI_MODELS = ("gemini-3.6-flash", "gemini-3.5-flash-lite")
+RETRYABLE_GEMINI_ERROR_CODES = {429, 500, 502, 503, 504}
+GEMINI_MAX_ATTEMPTS = 3
+GEMINI_RETRY_BASE_DELAY_SECONDS = 2
 
 
 def get_next_monday_eat(now: Optional[datetime] = None) -> datetime:
@@ -166,23 +170,44 @@ def get_next_monday_eat(now: Optional[datetime] = None) -> datetime:
 def _generate_content_with_fallback(client, model_name: str, contents: str, config):
     models = list(dict.fromkeys((model_name, *FALLBACK_GEMINI_MODELS)))
     for index, candidate in enumerate(models):
-        try:
-            response = client.models.generate_content(
-                model=candidate,
-                contents=contents,
-                config=config,
-            )
-        except genai.errors.APIError as exc:
-            if exc.code != 404 or exc.status != "NOT_FOUND" or index == len(models) - 1:
-                raise
-            print(
-                f"[!] Gemini model {candidate} is unavailable; "
-                f"trying {models[index + 1]}."
-            )
-        else:
-            if candidate != model_name:
-                print(f"[*] Gemini model fallback selected: {candidate}")
-            return response, candidate
+        for attempt in range(GEMINI_MAX_ATTEMPTS):
+            try:
+                response = client.models.generate_content(
+                    model=candidate,
+                    contents=contents,
+                    config=config,
+                )
+            except genai.errors.APIError as exc:
+                if exc.code == 404 and exc.status == "NOT_FOUND":
+                    if index == len(models) - 1:
+                        raise
+                    print(
+                        f"[!] Gemini model {candidate} is unavailable; "
+                        f"trying {models[index + 1]}."
+                    )
+                    break
+                if exc.code not in RETRYABLE_GEMINI_ERROR_CODES:
+                    raise
+                if attempt + 1 < GEMINI_MAX_ATTEMPTS:
+                    delay = GEMINI_RETRY_BASE_DELAY_SECONDS * (2**attempt)
+                    print(
+                        f"[!] Gemini model {candidate} returned HTTP {exc.code}; "
+                        f"retrying in {delay} seconds "
+                        f"({attempt + 1}/{GEMINI_MAX_ATTEMPTS - 1})."
+                    )
+                    time.sleep(delay)
+                    continue
+                if index == len(models) - 1:
+                    raise
+                print(
+                    f"[!] Gemini model {candidate} remains unavailable; "
+                    f"trying {models[index + 1]}."
+                )
+                break
+            else:
+                if candidate != model_name:
+                    print(f"[*] Gemini model fallback selected: {candidate}")
+                return response, candidate
 
 
 def _read_analytics_feedback(history_path: Path) -> str:
