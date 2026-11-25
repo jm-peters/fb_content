@@ -7,6 +7,10 @@ or grant this repository access to the organization secrets. The workflow passes
 them to the Python process as environment variables and checks that they are
 available before starting.
 
+Content generation defaults to `gemini-3.8-flash`. If Google reports that a model
+is unavailable, the generator tries `gemini-3.6-flash` and then
+`gemini-3.5-flash-lite`. Set `GEMINI_MODEL` to override the first model.
+
 No local `.env` file is needed in GitHub Actions. For local runs, the application
 reads the same values directly from the process environment; it does not load
 `.env` files automatically. Reel scene backgrounds are selected from Pixabay

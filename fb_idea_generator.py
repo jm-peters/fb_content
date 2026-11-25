@@ -145,6 +145,9 @@ searchable names and extra context. End Reels with a useful question or save CTA
 Use concise wording that fits a 1080x1350 carousel or a vertical terminal UI card.
 """
 
+DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
+FALLBACK_GEMINI_MODELS = ("gemini-3.6-flash", "gemini-3.5-flash-lite")
+
 
 def get_next_monday_eat(now: Optional[datetime] = None) -> datetime:
     """Return the next Monday at 00:00 EAT, or this Monday before 08:00 EAT."""
@@ -158,6 +161,28 @@ def get_next_monday_eat(now: Optional[datetime] = None) -> datetime:
     return (now + timedelta(days=days_ahead)).replace(
         hour=0, minute=0, second=0, microsecond=0
     )
+
+
+def _generate_content_with_fallback(client, model_name: str, contents: str, config):
+    models = list(dict.fromkeys((model_name, *FALLBACK_GEMINI_MODELS)))
+    for index, candidate in enumerate(models):
+        try:
+            response = client.models.generate_content(
+                model=candidate,
+                contents=contents,
+                config=config,
+            )
+        except genai.errors.APIError as exc:
+            if exc.code != 404 or exc.status != "NOT_FOUND" or index == len(models) - 1:
+                raise
+            print(
+                f"[!] Gemini model {candidate} is unavailable; "
+                f"trying {models[index + 1]}."
+            )
+        else:
+            if candidate != model_name:
+                print(f"[*] Gemini model fallback selected: {candidate}")
+            return response, candidate
 
 
 def _read_analytics_feedback(history_path: Path) -> str:
@@ -241,7 +266,7 @@ def generate_weekly_plan(
     if not api_key:
         raise ValueError("GEMINI_API_KEY environment variable is missing.")
 
-    model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = os.getenv("GEMINI_MODEL", DEFAULT_GEMINI_MODEL)
     client = genai.Client(api_key=api_key)
     base_monday = get_next_monday_eat()
     feedback = _read_analytics_feedback(DEFAULT_HISTORY_PATH)
@@ -272,8 +297,9 @@ seven days. Include source names and publication dates in the content or first c
         if slot["day"] == "Sunday":
             config_kwargs["tools"] = [types.Tool(google_search=types.GoogleSearch())]
         print(f"Generating {slot['day']} ({slot['format'].upper()}) — {slot['pillar']}...")
-        response = client.models.generate_content(
-            model=model_name,
+        response, model_name = _generate_content_with_fallback(
+            client=client,
+            model_name=model_name,
             contents=request_text,
             config=types.GenerateContentConfig(**config_kwargs),
         )
