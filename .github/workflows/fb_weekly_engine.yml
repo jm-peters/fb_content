@@ -46,6 +46,17 @@ jobs:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           FB_PAGE_ACCESS_TOKEN: ${{ secrets.FB_PAGE_ACCESS_TOKEN }}
         run: |
+          missing=()
+          for name in GEMINI_API_KEY PIXABAY_API_KEY FB_PAGE_ID FB_PAGE_ACCESS_TOKEN; do
+            if [[ -z "${!name}" ]]; then
+              missing+=("$name")
+            fi
+          done
+          if ((${#missing[@]})); then
+            echo "::error::GitHub Actions did not provide these secrets: ${missing[*]}"
+            echo "Check the secret names and, for organization secrets, confirm this repository is allowed to access them."
+            exit 1
+          fi
           python main.py
 
       - name: Commit updated history.json
