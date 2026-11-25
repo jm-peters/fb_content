@@ -1,0 +1,311 @@
+{
+  "week_start": "2026-11-30",
+  "carousels": [
+    {
+      "day": "Monday",
+      "title": "A Realistic Guide to Remote Task Platforms",
+      "pillar": "Online Income & Task Sites",
+      "tag": "Online Income & Task Sites",
+      "cover_title": "A Realistic Guide to Remote Task Platforms",
+      "cover_subtitle": "What to expect from entry-level remote platforms Required setups, assessment tests, and caveats No false promises—just practical verification steps",
+      "slides": [
+        {
+          "heading": "Data Annotation and RLHF Platforms",
+          "body": "Requires strong English, logic skills, or basic coding • Entry involves unpaid initial qualification assessments • Work availability fluctuates based on project demand",
+          "callout": "Pro Tip: Complete assessment tests on a stable desktop connection without distractions.",
+          "tag": "AI TRAINING TASKS",
+          "slide_type": "content"
+        },
+        {
+          "heading": "Usability and Software Testing Sites",
+          "body": "Requires a working microphone, webcam, and quiet space • Tasks involve speaking your thoughts while testing apps • Opportunities depend heavily on target demographic criteria",
+          "callout": "Pro Tip: Submit sample tests promptly to boost your rating on testing networks.",
+          "tag": "USER TESTING",
+          "slide_type": "content"
+        },
+        {
+          "heading": "Transcription and Micro-Task Networks",
+          "body": "Includes audio transcription, categorization, and search auditing • Requires passing accuracy and grammar entry tests • Earnings per task are small; speed and precision matter",
+          "callout": "Pro Tip: Maintain high accuracy scores to unlock higher-tier task pools.",
+          "tag": "MICRO-TASKS",
+          "slide_type": "content"
+        },
+        {
+          "heading": "Payment Setup and Verification Realities",
+          "body": "Most sites require verified PayPal, Payoneer, or Wise accounts • Government-issued ID and W-8BEN tax forms are often mandatory • Local transfer fees can impact total received funds",
+          "callout": "Pro Tip: Verify account requirements before completing hours of work.",
+          "tag": "PAYOUT CAVEATS",
+          "slide_type": "content"
+        }
+      ],
+      "closing_takeaway": "Check if platform accepts signups from your region Ensure your local payout method is fully verified Treat micro-tasks as skill-builders, not primary income",
+      "discussion_question": "Save this post to guide your platform research this week!",
+      "caption": "Looking for entry-level remote work? Micro-task platforms can offer flexible side tasks, but they are not a guaranteed full-time income. Before signing up, you need to understand assessment tests, demographic limits, and payout requirements. Swipe through for a realistic breakdown of popular entry-level task platforms and what to check before investing your time. Save this post to reference during your research!",
+      "first_comment": "Platforms mentioned for research: Outlier AI, DataAnnotation, UserTesting, uTest, Clickworker. Always verify current registration availability, identity verification rules, and supported payment methods (PayPal/Payoneer/Wise) directly on their official websites.",
+      "scheduled_unix_time": 1796054400,
+      "scheduled_readable_eat": "2026-11-30 19:00 EAT"
+    },
+    {
+      "day": "Wednesday",
+      "title": "Turn Messy Client Briefs into Clean Technical Specs",
+      "pillar": "AI Usage & Everyday Productivity",
+      "tag": "AI Usage & Everyday Productivity",
+      "cover_title": "Turn Messy Client Briefs into Clean Technical Specs",
+      "cover_subtitle": "Stop manually decoding chaotic project emails Use a 3-step AI prompt workflow Save hours before writing your first line of code",
+      "slides": [
+        {
+          "heading": "Isolate and Structure Messy Notes",
+          "body": "Clients often send fragmented voice notes or texts • Paste unedited text into your AI tool inside quotes • Direct the AI to ignore fluff and extract functional goals",
+          "callout": "Pro Tip: Never alter client text initially; let the LLM normalize it.",
+          "tag": "STEP 1: RAW INPUT",
+          "slide_type": "content"
+        },
+        {
+          "heading": "The Technical Scoping System Prompt",
+          "body": "Copy and paste this structured prompt • Forces output into distinct actionable sections • Saves time on initial architecture planning",
+          "callout": "Act as a Senior Tech Lead. Analyze: [PASTE_NOTES]. Output: 1. Core Features 2. Tech Stack Recommendations 3. Database Entities 4. Unclear Specs to Clarify.",
+          "tag": "REUSABLE PROMPT",
+          "slide_type": "code_tip"
+        },
+        {
+          "heading": "Identify Missing Requirements Early",
+          "body": "Ask AI to spot missing business logic and security risks • Define authentication limits and offline states upfront • Prevent scope creep and unpaid extra revisions",
+          "callout": "Follow-up Prompt: 'List 5 edge cases or user failure scenarios for this feature set.'",
+          "tag": "STEP 2: EDGE CASES",
+          "slide_type": "content"
+        }
+      ],
+      "closing_takeaway": "Turn chaotic briefs into clear task lists instantly Uncover edge cases before touching the codebase Save this post to use on your next project",
+      "discussion_question": "Bookmark this carousel for your next freelance project.",
+      "caption": "Scoping freelance projects or student dev assignments from messy client chats can waste hours. Using a structured prompt workflow turns unorganized requirements into clean technical specs, edge-case lists, and clear task breakdowns instantly. Try this system prompt on ChatGPT, Claude, or DeepSeek before you start your next codebase. Save this workflow for your next client brief.",
+      "first_comment": "Tools mentioned: ChatGPT, Claude by Anthropic, DeepSeek. Learn more practical tech tips and workflows at smartsort.tech. What tool do you currently use for project scoping?",
+      "scheduled_unix_time": 1796223600,
+      "scheduled_readable_eat": "2026-12-02 18:00 EAT"
+    },
+    {
+      "day": "Friday",
+      "title": "Speed Up Refactoring with Multi-Cursor Power Moves",
+      "pillar": "Clean Programming & Dev Shortcuts",
+      "tag": "Clean Programming & Dev Shortcuts",
+      "cover_title": "Speed Up Refactoring with Multi-Cursor Power Moves",
+      "cover_subtitle": "Stop editing matching lines one by one. Learn basic selection shortcuts for cleaner code.",
+      "slides": [
+        {
+          "heading": "Select the Next Matching Occurrence",
+          "body": "Highlight a word and press Cmd+D (Mac) or Ctrl+D (Windows). • Keep pressing to select extra occurrences sequentially. • Use Cmd+K Cmd+D to skip a specific match.",
+          "callout": "Shortcut: Cmd+D / Ctrl+D",
+          "tag": "SELECTION TRICKS",
+          "slide_type": "content"
+        },
+        {
+          "heading": "Insert Cursors Vertically Above or Below",
+          "body": "Press Option+Cmd+Up/Down (Mac) or Ctrl+Alt+Up/Down (Win). • Ideal for formatting JSON, arrays, or repetitive assignments. • Or hold Alt/Option and click anywhere to place custom cursors.",
+          "callout": "Example: Editing 10 object keys simultaneously",
+          "tag": "COLUMN EDITING",
+          "slide_type": "code_tip"
+        },
+        {
+          "heading": "Select All Occurrences in One File",
+          "body": "Highlight a variable and press Cmd+Shift+L / Ctrl+Shift+L. • Spawns a cursor at every identical match instantly. • For safer variable renaming, use F2 to respect code scope.",
+          "callout": "F2 = Safe rename across full scope",
+          "tag": "GLOBAL MATCHING",
+          "slide_type": "content"
+        }
+      ],
+      "closing_takeaway": "Master Cmd/Ctrl+D for selective editing. Use F2 for renaming variables safely. Save this cheat sheet for your next refactor!",
+      "discussion_question": "Which shortcut do you use most often?",
+      "caption": "Editing repeated lines manually slows down your workflow and causes accidental typos. Master these essential VS Code multi-cursor shortcuts to edit code faster and keep your files clean. Save this guide for your next coding session or refactoring task.",
+      "first_comment": "Tools covered: VS Code (Visual Studio Code). Search keywords: VS Code shortcuts, multi cursor editing, clean code tips, developer productivity, smartsort.tech.",
+      "scheduled_unix_time": 1796396400,
+      "scheduled_readable_eat": "2026-12-04 18:00 EAT"
+    }
+  ],
+  "reels": [
+    {
+      "day": "Tuesday",
+      "title": "Stop Scrolling, Start Micro-Tasking",
+      "hook": "Stop Scrolling, Start Micro-Tasking",
+      "script": "If you spend hours online without earning anything, entry-level data annotation and AI evaluation can help you start building remote work experience. Platforms hire contributors to evaluate text responses, transcribe audio, or draw bounding boxes around visual objects to train AI models. Earnings vary widely by location and project availability. Never treat this as guaranteed salary, and verify payout methods beforehand. Legitimate platforms never ask for registration fees. Save this reel for your job search checklist and share it with a friend!",
+      "scenes": [
+        {
+          "scene_number": 1,
+          "duration_seconds": 10,
+          "voiceover_text": "If you spend hours online without earning anything, entry-level data annotation and AI evaluation can help you start building remote work experience.",
+          "on_screen_text": "ENTRY REMOTE WORK",
+          "visual_prompt": "Split screen showing social media scrolling versus an active data tagging UI on a laptop.",
+          "entity_name": "Data Annotation",
+          "pay_or_impact": "Varies",
+          "requirement": "Laptop or smartphone with internet connection",
+          "difficulty": "Beginner"
+        },
+        {
+          "scene_number": 2,
+          "duration_seconds": 10,
+          "voiceover_text": "Platforms hire contributors to evaluate text responses, transcribe audio, or draw bounding boxes around visual objects to train AI models.",
+          "on_screen_text": "WORKFLOW OVERVIEW",
+          "visual_prompt": "Close-up of a data labeling interface marking objects in photos with bounding boxes.",
+          "entity_name": "Outlier AI & Remotasks",
+          "pay_or_impact": "Paid per completed task",
+          "requirement": "Pass initial assessment tests",
+          "difficulty": "Beginner"
+        },
+        {
+          "scene_number": 3,
+          "duration_seconds": 10,
+          "voiceover_text": "Earnings vary widely by location and project availability. Never treat this as guaranteed salary, and verify payout methods beforehand.",
+          "on_screen_text": "REALISTIC EXPECTATIONS",
+          "visual_prompt": "Terminal card listing key setup steps and realistic expectations.",
+          "entity_name": "Payout & Terms",
+          "pay_or_impact": "Varies by task volume",
+          "requirement": "Verified PayPal or supported digital wallet",
+          "difficulty": "Intermediate"
+        },
+        {
+          "scene_number": 4,
+          "duration_seconds": 10,
+          "voiceover_text": "Legitimate platforms never ask for registration fees. Save this reel for your job search checklist and share it with a friend!",
+          "on_screen_text": "STAY SAFE & SAVE",
+          "visual_prompt": "Terminal UI highlighting security rules with a glowing save icon animation.",
+          "entity_name": "Safety Check",
+          "pay_or_impact": "Zero upfront fees",
+          "requirement": "Never pay to work",
+          "difficulty": "Beginner"
+        }
+      ],
+      "visual_keywords": [
+        "Split screen showing social media scrolling versus an active data tagging UI on a laptop.",
+        "Close-up of a data labeling interface marking objects in photos with bounding boxes.",
+        "Terminal card listing key setup steps and realistic expectations.",
+        "Terminal UI highlighting security rules with a glowing save icon animation."
+      ],
+      "caption": "If you spend hours online without any return, entry-level data labeling or RLHF evaluation might be a practical starting point. Platforms pay per task to help train AI models. Earnings depend on project availability and location, so always treat this as extra income rather than guaranteed full-time work. Never pay any fee to join a legitimate platform.",
+      "first_comment": "Searchable platforms to inspect: Remotasks, Outlier AI, and Clickworker. Check their official terms for regional availability and supported payout methods like PayPal or Airtm.",
+      "scheduled_unix_time": 1796140800,
+      "scheduled_readable_eat": "2026-12-01 19:00 EAT"
+    },
+    {
+      "day": "Thursday",
+      "title": "Fix Useless AI Debugging Output",
+      "hook": "Fix Useless AI Debugging Output",
+      "script": "Tired of pasting error messages into AI and getting generic code that breaks your project? First, state your exact tech stack, runtime versions, and framework constraints before adding code. Second, paste the full stack trace along with only the function directly triggering the issue. Finally, ask the AI to explain the root cause before writing any new code. Save this prompt structure for your next bug!",
+      "scenes": [
+        {
+          "scene_number": 1,
+          "duration_seconds": 8,
+          "voiceover_text": "Tired of pasting error messages into AI and getting generic code that breaks your project?",
+          "on_screen_text": "Why AI Debugging Fails",
+          "visual_prompt": "Terminal card displaying a red console error pasted into an AI chat window returning an unhelpful generic snippet",
+          "entity_name": "ChatGPT & Claude",
+          "pay_or_impact": "Saves debugging time",
+          "requirement": "Basic coding background",
+          "difficulty": "Beginner"
+        },
+        {
+          "scene_number": 2,
+          "duration_seconds": 10,
+          "voiceover_text": "First, state your exact tech stack, runtime versions, and framework constraints before adding code.",
+          "on_screen_text": "Step 1: Define Environment",
+          "visual_prompt": "Dark UI card showing environment details such as Node.js v20, React 18, and TypeScript",
+          "entity_name": "Environment Prompting",
+          "pay_or_impact": "Prevents deprecated API code",
+          "requirement": "List active library versions",
+          "difficulty": "Beginner"
+        },
+        {
+          "scene_number": 3,
+          "duration_seconds": 10,
+          "voiceover_text": "Second, paste the full stack trace along with only the function directly triggering the issue.",
+          "on_screen_text": "Step 2: Isolate the Bug",
+          "visual_prompt": "Split terminal card displaying a full stack trace on the left and a 10-line code snippet on the right",
+          "entity_name": "Stack Trace Context",
+          "pay_or_impact": "Precise line-level diagnosis",
+          "requirement": "Include error trace and snippet",
+          "difficulty": "Intermediate"
+        },
+        {
+          "scene_number": 4,
+          "duration_seconds": 10,
+          "voiceover_text": "Finally, ask the AI to explain the root cause before writing any new code. Save this prompt structure for your next bug!",
+          "on_screen_text": "Step 3: Ask for Root Cause",
+          "visual_prompt": "Terminal UI card showing structured bullet points explaining the bug followed by a clean code fix",
+          "entity_name": "Debug Workflow",
+          "pay_or_impact": "Improves code understanding",
+          "requirement": "Request explanation before code",
+          "difficulty": "Beginner"
+        }
+      ],
+      "visual_keywords": [
+        "Terminal card displaying a red console error pasted into an AI chat window returning an unhelpful generic snippet",
+        "Dark UI card showing environment details such as Node.js v20, React 18, and TypeScript",
+        "Split terminal card displaying a full stack trace on the left and a 10-line code snippet on the right",
+        "Terminal UI card showing structured bullet points explaining the bug followed by a clean code fix"
+      ],
+      "caption": "Pasting raw code errors into AI tools often yields generic suggestions that do not work. Structuring your debug prompts with precise context isolates bugs faster. Save this workflow for your next coding session.",
+      "first_comment": "Tested on ChatGPT, Claude, and DeepSeek. Always check platform privacy settings before sharing proprietary or sensitive codebase snippets.",
+      "scheduled_unix_time": 1796313600,
+      "scheduled_readable_eat": "2026-12-03 19:00 EAT"
+    },
+    {
+      "day": "Saturday",
+      "title": "Automate Python Scripts for Free with GitHub Actions",
+      "hook": "Automate Python Scripts for Free with GitHub Actions",
+      "script": "You do not need a paid server or an always-on laptop to run your scheduled automation scripts. Add a workflow YAML file inside your repo under dot github slash workflows, and define a cron schedule trigger. Store sensitive keys inside GitHub Secrets so your access tokens stay protected while your code executes. Trigger a manual run to test it once, then let it run on autopilot. What repetitive script will you automate first? Save this reel.",
+      "scenes": [
+        {
+          "scene_number": 1,
+          "duration_seconds": 8,
+          "voiceover_text": "You do not need a paid server or an always-on laptop to run your scheduled automation scripts.",
+          "on_screen_text": "Free Script Automation",
+          "visual_prompt": "Dark mode code editor showing a basic script alongside a cloud icon animation.",
+          "entity_name": "GitHub Actions",
+          "pay_or_impact": "Saves cloud server costs for light tasks",
+          "requirement": "Free GitHub account",
+          "difficulty": "Beginner"
+        },
+        {
+          "scene_number": 2,
+          "duration_seconds": 9,
+          "voiceover_text": "Add a workflow YAML file inside your repo under dot github slash workflows, and define a cron schedule trigger.",
+          "on_screen_text": "Set Up Cron Triggers",
+          "visual_prompt": "Terminal UI card highlighting schedule cron syntax in a YAML workflow config.",
+          "entity_name": "YAML Workflows",
+          "pay_or_impact": "Runs code automatically on schedule",
+          "requirement": "Basic YAML format understanding",
+          "difficulty": "Beginner"
+        },
+        {
+          "scene_number": 3,
+          "duration_seconds": 9,
+          "voiceover_text": "Store sensitive keys inside GitHub Secrets so your access tokens stay protected while your code executes.",
+          "on_screen_text": "Secure API Keys",
+          "visual_prompt": "UI mock showing Repository Settings navigating to Secrets and variables tab.",
+          "entity_name": "GitHub Secrets",
+          "pay_or_impact": "Prevents accidental API key exposure",
+          "requirement": "Never hardcode passwords in scripts",
+          "difficulty": "Beginner"
+        },
+        {
+          "scene_number": 4,
+          "duration_seconds": 10,
+          "voiceover_text": "Trigger a manual run to test it once, then let it run on autopilot. What repetitive script will you automate first? Save this reel.",
+          "on_screen_text": "Test & Automate",
+          "visual_prompt": "GitHub Actions dashboard card displaying a green success checkmark.",
+          "entity_name": "Automation Workflow",
+          "pay_or_impact": "Varies by task complexity",
+          "requirement": "Push code repository to GitHub",
+          "difficulty": "Beginner"
+        }
+      ],
+      "visual_keywords": [
+        "Dark mode code editor showing a basic script alongside a cloud icon animation.",
+        "Terminal UI card highlighting schedule cron syntax in a YAML workflow config.",
+        "UI mock showing Repository Settings navigating to Secrets and variables tab.",
+        "GitHub Actions dashboard card displaying a green success checkmark."
+      ],
+      "caption": "Stop keeping your laptop running just to execute scheduled python scripts. You can automate light tasks to run automatically using GitHub Actions at zero cost. Save this post for your next automation project.",
+      "first_comment": "Searchable tools: GitHub Actions, Cron-job schedule, Python automation. Always verify current GitHub Actions free-tier minute allocations on their official documentation.",
+      "scheduled_unix_time": 1796457600,
+      "scheduled_readable_eat": "2026-12-05 11:00 EAT"
+    }
+  ]
+}
