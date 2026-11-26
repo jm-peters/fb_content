@@ -1,8 +1,13 @@
 {
   "past_topics": [
-    "Stop AI from Inventing Facts in Your Project Notes"
+    "Stop AI from Inventing Facts in Your Project Notes",
+    "Stop Staging Messy Debug Code in Git"
   ],
-  "top_performing_topics": [],
+  "top_performing_topics": [
+    "Tired of AI hallucinating details when summarizing client notes or lecture transcripts? Use strict prompt cons",
+    "Untitled Post",
+    "Untitled Post"
+  ],
   "published_posts": [
     {
       "day": "Thursday",
@@ -15,9 +20,31 @@
       "scheduled_unix": 1795708800,
       "scheduled_for": "2026-11-26 19:00 EAT",
       "comment_posted_at": "2026-11-26T20:32:03.115024+00:00"
+    },
+    {
+      "day": "Friday",
+      "format": "carousel",
+      "title": "Stop Staging Messy Debug Code in Git",
+      "post_id": "699710063235951_122153748057000735",
+      "first_comment": "Search terms to explore further: git patch staging, atomic commits, git diff --staged, and Git GUI staging in VS Code. Note: If you accidentally stage a hunk, run 'git restore --staged <file>' to reset it safely without losing your work.",
+      "comment_status": "pending",
+      "schedule_key": "2026-11-27:carousel",
+      "scheduled_unix": 1795791600,
+      "scheduled_for": "2026-11-27 18:00 EAT"
     }
   ],
   "analytics_by_post": [
+    {
+      "post_id": "699710063235951_122153716191000735",
+      "headline": "Tired of AI hallucinating details when summarizing client notes or lecture transcripts? Use strict prompt cons",
+      "created_time": "2026-11-26T16:00:04+0000",
+      "reach": null,
+      "reach_metric": "post_total_media_view_unique",
+      "shares": 0,
+      "comments": 1,
+      "reactions": 2,
+      "score": 4
+    },
     {
       "post_id": "699710063235951_122153376441000735",
       "headline": "Untitled Post",
@@ -26,8 +53,8 @@
       "reach_metric": "post_total_media_view_unique",
       "shares": 0,
       "comments": 0,
-      "reactions": 0,
-      "score": 0
+      "reactions": 1,
+      "score": 1
     },
     {
       "post_id": "699710063235951_1006489502512034",
@@ -37,9 +64,9 @@
       "reach_metric": "post_total_media_view_unique",
       "shares": 0,
       "comments": 0,
-      "reactions": 0,
-      "score": 0
+      "reactions": 1,
+      "score": 1
     }
   ],
-  "last_analytics_sync": "2026-11-26T13:12:50.093649+00:00"
+  "last_analytics_sync": "2026-11-26T22:03:03.194474+00:00"
 }
