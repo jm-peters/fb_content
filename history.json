@@ -1,7 +1,44 @@
 {
-  "past_topics": [],
+  "past_topics": [
+    "Stop AI from Inventing Facts in Your Project Notes"
+  ],
   "top_performing_topics": [],
-  "published_posts": [],
-  "analytics_by_post": [],
-  "last_analytics_sync": null
+  "published_posts": [
+    {
+      "day": "Thursday",
+      "format": "reel",
+      "title": "Stop AI from Inventing Facts in Your Project Notes",
+      "video_id": "1466859122300525",
+      "first_comment": "Searchable tools mentioned: ChatGPT, Claude, Markdown syntax. Always review data privacy policies before processing sensitive project client files. Visit smartsort.tech for practical developer guides.",
+      "comment_status": "pending",
+      "schedule_key": "2026-11-26:reel",
+      "scheduled_unix": 1795708800,
+      "scheduled_for": "2026-11-26 19:00 EAT"
+    }
+  ],
+  "analytics_by_post": [
+    {
+      "post_id": "699710063235951_122153376441000735",
+      "headline": "Untitled Post",
+      "created_time": "2026-11-22T13:51:58+0000",
+      "reach": null,
+      "reach_metric": "post_total_media_view_unique",
+      "shares": 0,
+      "comments": 0,
+      "reactions": 0,
+      "score": 0
+    },
+    {
+      "post_id": "699710063235951_1006489502512034",
+      "headline": "Untitled Post",
+      "created_time": "2026-11-22T13:49:50+0000",
+      "reach": null,
+      "reach_metric": "post_total_media_view_unique",
+      "shares": 0,
+      "comments": 0,
+      "reactions": 0,
+      "score": 0
+    }
+  ],
+  "last_analytics_sync": "2026-11-26T13:12:50.093649+00:00"
 }
