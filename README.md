@@ -21,4 +21,5 @@ another post for the same date, and the workflow commits the updated history.
 No local `.env` file is needed in GitHub Actions. For local runs, the application
 reads the same values directly from the process environment; it does not load
 `.env` files automatically. Reel scene backgrounds are selected from Pixabay
-using each scene's visual prompt.
+using each scene's visual prompt; if the search or image download fails, that
+scene uses the branded terminal-card background instead.

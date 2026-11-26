@@ -307,9 +307,22 @@ def _scene_cards(
         )
         segment_duration = max(0.1, segment_duration)
         output = work_dir / f"scene_{index:02d}.png"
-        background = _pixabay_background(scene.get("visual_prompt", ""), pixabay_api_key)
-        if background is None:
-            print(f"[!] Pixabay found no image for Reel scene {index}; using the branded background.")
+        try:
+            background = _pixabay_background(
+                scene.get("visual_prompt", ""),
+                pixabay_api_key,
+            )
+        except RuntimeError as exc:
+            print(
+                f"[!] {exc} Using the branded background for Reel scene {index}."
+            )
+            background = None
+        else:
+            if background is None:
+                print(
+                    f"[!] Pixabay found no image for Reel scene {index}; "
+                    "using the branded background."
+                )
         _make_terminal_card(
             scene,
             index,
