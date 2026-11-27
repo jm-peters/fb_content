@@ -1,10 +1,12 @@
 {
   "past_topics": [
     "Stop AI from Inventing Facts in Your Project Notes",
-    "Stop Staging Messy Debug Code in Git"
+    "Stop Staging Messy Debug Code in Git",
+    "Auto-Sort Your Downloads Folder with Python"
   ],
   "top_performing_topics": [
     "Tired of AI hallucinating details when summarizing client notes or lecture transcripts? Use strict prompt cons",
+    "Stop Staging Messy Debug Code in Git",
     "Untitled Post",
     "Untitled Post"
   ],
@@ -32,6 +34,17 @@
       "scheduled_unix": 1795791600,
       "scheduled_for": "2026-11-27 18:00 EAT",
       "comment_posted_at": "2026-11-27T21:44:33.612770+00:00"
+    },
+    {
+      "day": "Saturday",
+      "format": "reel",
+      "title": "Auto-Sort Your Downloads Folder with Python",
+      "video_id": "1490961789640544",
+      "first_comment": "Search terms: 'Python pathlib tutorial', 'shutil.move documentation', 'Windows Task Scheduler run Python script', 'Mac Crontab automate Python'. Check standard docs on python.org for pathlib safety tips before moving system files.",
+      "comment_status": "pending",
+      "schedule_key": "2026-11-28:reel",
+      "scheduled_unix": 1795852800,
+      "scheduled_for": "2026-11-28 11:00 EAT"
     }
   ],
   "analytics_by_post": [
@@ -45,6 +58,17 @@
       "comments": 1,
       "reactions": 2,
       "score": 4
+    },
+    {
+      "post_id": "699710063235951_122153748057000735",
+      "headline": "Stop Staging Messy Debug Code in Git",
+      "created_time": "2026-11-27T13:12:37+0000",
+      "reach": null,
+      "reach_metric": "post_total_media_view_unique",
+      "shares": 0,
+      "comments": 1,
+      "reactions": 0,
+      "score": 2
     },
     {
       "post_id": "699710063235951_122153376441000735",
@@ -69,5 +93,5 @@
       "score": 1
     }
   ],
-  "last_analytics_sync": "2026-11-26T22:03:03.194474+00:00"
+  "last_analytics_sync": "2026-11-27T21:45:41.394640+00:00"
 }
