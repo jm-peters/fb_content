@@ -41,10 +41,11 @@
       "title": "Auto-Sort Your Downloads Folder with Python",
       "video_id": "1490961789640544",
       "first_comment": "Search terms: 'Python pathlib tutorial', 'shutil.move documentation', 'Windows Task Scheduler run Python script', 'Mac Crontab automate Python'. Check standard docs on python.org for pathlib safety tips before moving system files.",
-      "comment_status": "pending",
+      "comment_status": "posted",
       "schedule_key": "2026-11-28:reel",
       "scheduled_unix": 1795852800,
-      "scheduled_for": "2026-11-28 11:00 EAT"
+      "scheduled_for": "2026-11-28 11:00 EAT",
+      "comment_posted_at": "2026-11-28T12:20:20.135929+00:00"
     }
   ],
   "analytics_by_post": [
